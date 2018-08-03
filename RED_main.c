@@ -56,7 +56,12 @@
 #include "PQ9_bus_engine.h"
 #include "queue.h"
 
+#include "osal.h"
+
 #include "RED_Board.h"
+
+extern UART_Handle uart_pq9_bus;
+extern UART_Handle uart_dbg_bus;
 
 bool start_flag = false;
 
@@ -70,11 +75,14 @@ void *mainThread(void *arg0)
     GPIO_init();
     UART_init();
     Timer_init();
+    Watchdog_init();
 
     /*PQ9 services start*/
     pkt_pool_INIT();
     device_init();
     queueInit();
+
+    init_parameters();
 
     start_flag = true;
 
@@ -129,6 +137,9 @@ void *pqTransmitThread(void *arg0)
     return (NULL);
 }
 
+char buf_rs[100];
+uint16_t buf_cnt = 0;
+
 void *dbgThread(void *arg0)
 {
 
@@ -139,7 +150,20 @@ void *dbgThread(void *arg0)
     /* Loop forever */
     while (1) {
 
-         usleep(1);
+
+        //UARTMSP432_Object *object = uart_pq9_bus->object;
+
+        //char temp[10];
+
+          //while(RingBuf_get(&object->ringBuffer, &buf_rs[buf_cnt]) != -1) {
+          //  buf_cnt++;
+          //}
+          //while(buf_cnt > 0) {
+          //  sprintf(temp,"%02x ", buf_rs[buf_cnt]);
+          // UART_write(uart_dbg_bus, temp, strlen(temp));
+          //  buf_cnt--;
+          //}
+         usleep(10000);
     }
 
     return (NULL);
