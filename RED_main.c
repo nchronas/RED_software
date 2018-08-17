@@ -80,7 +80,6 @@ void *mainThread(void *arg0)
     /*PQ9 services start*/
     pkt_pool_INIT();
     device_init();
-    queueInit();
 
     init_parameters();
 
